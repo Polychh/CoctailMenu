@@ -12,12 +12,15 @@ class MainViewController: UIViewController {
     private let viewModel = MainViewModel()
     private var cancellables = Set<AnyCancellable>()
     private let searchController = CoctailSearchController(searchResultsController: nil)
+    private let activityIndicator = UIActivityIndicatorView(frame: .zero)
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         observeData()
         setUpSearchController()
+        configActivityIndecator()
+        setConstraints()
     }
     
     private func observeData(){
@@ -28,9 +31,25 @@ class MainViewController: UIViewController {
                 print("get data \(data)")
             }
             .store(in: &cancellables)
+        viewModel.$isLoaded
+            .dropFirst()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isLoaded in
+                guard let self else {return}
+                isLoaded ? activityIndicator.stopAnimating() : activityIndicator.startAnimating()
+            }
+            .store(in: &cancellables)
     }
 }
 
+//MARK: - SetUp UI
+private extension MainViewController {
+    func configActivityIndecator(){
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.style = .large
+        activityIndicator.color = .systemPink
+    }
+}
 //MARK: - Configure SearchController
 private extension MainViewController{
     func setUpSearchController(){
@@ -56,5 +75,17 @@ extension MainViewController:  UISearchControllerDelegate, UISearchBarDelegate{
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder() // dismiss keyBoard
+    }
+}
+
+//MARK: - SetUp Constrains
+private extension MainViewController {
+    func setConstraints() {
+        view.addSubview(activityIndicator)
+        
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+        ])
     }
 }
