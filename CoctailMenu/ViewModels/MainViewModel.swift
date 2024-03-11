@@ -10,6 +10,7 @@ import Foundation
 final class MainViewModel{
     
     @Published var dataCoctail:  CoctailData = .init()
+    @Published var isLoaded: Bool = false
     private let network: NetworkMangerProtocol = NetworkManager()
     
     init(){
@@ -23,10 +24,12 @@ final class MainViewModel{
     }
     
     private func fetchCoctailData(request: CoctailRequest){
+        isLoaded = false
         Task{ @MainActor in
             do{
                 dataCoctail = []
                 dataCoctail = try await network.request(request)
+                isLoaded = true
                 print("done")
             } catch{
                 print(error.localizedDescription)
