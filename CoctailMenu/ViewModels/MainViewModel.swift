@@ -9,12 +9,13 @@ import Foundation
 
 final class MainViewModel{
     
-    @Published var dataCoctail:  CoctailData = .init()
+    @Published var dataCoctail: [ListSectionModel] = []
     @Published var isLoaded: Bool = false
     private let network: NetworkMangerProtocol = NetworkManager()
+    private var data: [CoctailModel] = .init()
     
     init(){
-        //fetchCoctailData()
+        dataCoctail.append(.ingridients(IngridiensModel.getIngridients()))
     }
     
     func getIngridientsData(searchWord: String){
@@ -27,8 +28,12 @@ final class MainViewModel{
         isLoaded = false
         Task{ @MainActor in
             do{
-                dataCoctail = []
-                dataCoctail = try await network.request(request)
+                if dataCoctail.count > 1{
+                    dataCoctail.removeLast()
+                }
+                data = []
+                data = try await network.request(request)
+                dataCoctail.append(.coctailData(data))
                 isLoaded = true
                 print("done")
             } catch{

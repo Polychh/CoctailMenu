@@ -19,6 +19,8 @@
 		36E7A7D52B9F52440073E6B4 /* CoctailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E7A7D42B9F52440073E6B4 /* CoctailRequest.swift */; };
 		36E7A7D72B9F55110073E6B4 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E7A7D62B9F55110073E6B4 /* NetworkManager.swift */; };
 		36E7A7DB2B9F5D5D0073E6B4 /* CoctailSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E7A7DA2B9F5D5D0073E6B4 /* CoctailSearchController.swift */; };
+		36E7A7DD2B9F72130073E6B4 /* IngridiensModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E7A7DC2B9F72130073E6B4 /* IngridiensModel.swift */; };
+		36E7A7DF2B9F74DF0073E6B4 /* ListSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E7A7DE2B9F74DF0073E6B4 /* ListSectionModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,8 @@
 		36E7A7D42B9F52440073E6B4 /* CoctailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoctailRequest.swift; sourceTree = "<group>"; };
 		36E7A7D62B9F55110073E6B4 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		36E7A7DA2B9F5D5D0073E6B4 /* CoctailSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoctailSearchController.swift; sourceTree = "<group>"; };
+		36E7A7DC2B9F72130073E6B4 /* IngridiensModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngridiensModel.swift; sourceTree = "<group>"; };
+		36E7A7DE2B9F74DF0073E6B4 /* ListSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListSectionModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +89,8 @@
 			isa = PBXGroup;
 			children = (
 				36E7A7C52B9F4DCC0073E6B4 /* CoctailModel.swift */,
+				36E7A7DC2B9F72130073E6B4 /* IngridiensModel.swift */,
+				36E7A7DE2B9F74DF0073E6B4 /* ListSectionModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -208,6 +214,8 @@
 				36E7A7DB2B9F5D5D0073E6B4 /* CoctailSearchController.swift in Sources */,
 				36E7A7D72B9F55110073E6B4 /* NetworkManager.swift in Sources */,
 				36E7A7D02B9F519A0073E6B4 /* NetworkError.swift in Sources */,
+				36E7A7DF2B9F74DF0073E6B4 /* ListSectionModel.swift in Sources */,
+				36E7A7DD2B9F72130073E6B4 /* IngridiensModel.swift in Sources */,
 				36E7A7B42B9F43580073E6B4 /* MainViewController.swift in Sources */,
 				36E7A7B02B9F43580073E6B4 /* AppDelegate.swift in Sources */,
 				36E7A7B22B9F43580073E6B4 /* SceneDelegate.swift in Sources */,
