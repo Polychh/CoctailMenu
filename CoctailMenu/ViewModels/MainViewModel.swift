@@ -13,13 +13,19 @@ final class MainViewModel{
     private let network: NetworkMangerProtocol = NetworkManager()
     
     init(){
-        fetchCoctailData()
+        //fetchCoctailData()
     }
     
-    private func fetchCoctailData(){
-        let request = CoctailRequest(cotailName: nil, ingridients: "vodka", paramToChoose: .ingridients)
+    func getIngridientsData(searchWord: String){
+        let searcWord = searchWord.lowercased()
+        let request = CoctailRequest(cotailName: nil, ingridients: searcWord, paramToChoose: .ingridients)
+         fetchCoctailData(request: request)
+    }
+    
+    private func fetchCoctailData(request: CoctailRequest){
         Task{ @MainActor in
             do{
+                dataCoctail = []
                 dataCoctail = try await network.request(request)
                 print("done")
             } catch{
