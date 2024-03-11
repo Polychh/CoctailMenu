@@ -24,7 +24,7 @@ class MainViewController: UIViewController {
     }
     
     private func observeData(){
-        viewModel.$dataCoctail
+        viewModel.$dataCoctailsForSections
             .receive(on: DispatchQueue.main)
             .sink { [weak self] data in
                 guard let self else {return}
@@ -65,7 +65,7 @@ private extension MainViewController{
 extension MainViewController:  UISearchControllerDelegate, UISearchBarDelegate{
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchText = searchBar.text, !searchText.isEmpty else { return }
-        viewModel.getIngridientsData(searchWord: searchText)
+        viewModel.getCoctailData(searchWord: searchText)
         searchBar.resignFirstResponder()
     }
     

@@ -21,6 +21,10 @@
 		36E7A7DB2B9F5D5D0073E6B4 /* CoctailSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E7A7DA2B9F5D5D0073E6B4 /* CoctailSearchController.swift */; };
 		36E7A7DD2B9F72130073E6B4 /* IngridiensModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E7A7DC2B9F72130073E6B4 /* IngridiensModel.swift */; };
 		36E7A7DF2B9F74DF0073E6B4 /* ListSectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E7A7DE2B9F74DF0073E6B4 /* ListSectionModel.swift */; };
+		36E7A7E22B9F80110073E6B4 /* CompositionLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E7A7E12B9F80110073E6B4 /* CompositionLayout.swift */; };
+		36E7A7E52B9F87280073E6B4 /* IngridientCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E7A7E42B9F87280073E6B4 /* IngridientCell.swift */; };
+		36E7A7E72B9F87D40073E6B4 /* UIImageView + ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E7A7E62B9F87D40073E6B4 /* UIImageView + ext.swift */; };
+		36E7A7E92B9F88970073E6B4 /* CoctailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E7A7E82B9F88970073E6B4 /* CoctailCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +44,10 @@
 		36E7A7DA2B9F5D5D0073E6B4 /* CoctailSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoctailSearchController.swift; sourceTree = "<group>"; };
 		36E7A7DC2B9F72130073E6B4 /* IngridiensModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngridiensModel.swift; sourceTree = "<group>"; };
 		36E7A7DE2B9F74DF0073E6B4 /* ListSectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListSectionModel.swift; sourceTree = "<group>"; };
+		36E7A7E12B9F80110073E6B4 /* CompositionLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionLayout.swift; sourceTree = "<group>"; };
+		36E7A7E42B9F87280073E6B4 /* IngridientCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngridientCell.swift; sourceTree = "<group>"; };
+		36E7A7E62B9F87D40073E6B4 /* UIImageView + ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView + ext.swift"; sourceTree = "<group>"; };
+		36E7A7E82B9F88970073E6B4 /* CoctailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoctailCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +80,7 @@
 		36E7A7AE2B9F43580073E6B4 /* CoctailMenu */ = {
 			isa = PBXGroup;
 			children = (
+				36E7A7E02B9F7FEB0073E6B4 /* Helpers */,
 				36E7A7CD2B9F506A0073E6B4 /* Services */,
 				36E7A7CA2B9F503D0073E6B4 /* ViewModels */,
 				36E7A7C92B9F4F1A0073E6B4 /* Views */,
@@ -98,6 +107,7 @@
 		36E7A7C92B9F4F1A0073E6B4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				36E7A7E32B9F87110073E6B4 /* Cells */,
 				36E7A7B32B9F43580073E6B4 /* MainViewController.swift */,
 				36E7A7DA2B9F5D5D0073E6B4 /* CoctailSearchController.swift */,
 			);
@@ -137,6 +147,24 @@
 				36E7A7D42B9F52440073E6B4 /* CoctailRequest.swift */,
 			);
 			path = CoctailRequests;
+			sourceTree = "<group>";
+		};
+		36E7A7E02B9F7FEB0073E6B4 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				36E7A7E12B9F80110073E6B4 /* CompositionLayout.swift */,
+				36E7A7E62B9F87D40073E6B4 /* UIImageView + ext.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		36E7A7E32B9F87110073E6B4 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				36E7A7E42B9F87280073E6B4 /* IngridientCell.swift */,
+				36E7A7E82B9F88970073E6B4 /* CoctailCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -209,18 +237,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				36E7A7E52B9F87280073E6B4 /* IngridientCell.swift in Sources */,
 				36E7A7C62B9F4DCC0073E6B4 /* CoctailModel.swift in Sources */,
 				36E7A7D22B9F52100073E6B4 /* CoctailRequestProtocol.swift in Sources */,
 				36E7A7DB2B9F5D5D0073E6B4 /* CoctailSearchController.swift in Sources */,
+				36E7A7E22B9F80110073E6B4 /* CompositionLayout.swift in Sources */,
 				36E7A7D72B9F55110073E6B4 /* NetworkManager.swift in Sources */,
 				36E7A7D02B9F519A0073E6B4 /* NetworkError.swift in Sources */,
 				36E7A7DF2B9F74DF0073E6B4 /* ListSectionModel.swift in Sources */,
 				36E7A7DD2B9F72130073E6B4 /* IngridiensModel.swift in Sources */,
 				36E7A7B42B9F43580073E6B4 /* MainViewController.swift in Sources */,
 				36E7A7B02B9F43580073E6B4 /* AppDelegate.swift in Sources */,
+				36E7A7E92B9F88970073E6B4 /* CoctailCell.swift in Sources */,
 				36E7A7B22B9F43580073E6B4 /* SceneDelegate.swift in Sources */,
 				36E7A7D52B9F52440073E6B4 /* CoctailRequest.swift in Sources */,
 				36E7A7CC2B9F50500073E6B4 /* MainViewModel.swift in Sources */,
+				36E7A7E72B9F87D40073E6B4 /* UIImageView + ext.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

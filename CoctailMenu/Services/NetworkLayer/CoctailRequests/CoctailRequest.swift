@@ -40,7 +40,7 @@ struct CoctailRequest: CoctailRequestProtocol{
     
     var queryItems: [String : String]?{
         switch paramToChoose{
-        case .name:
+        case .coctailName:
             if let cotailName {
                 let params = [
                     "name": "\(cotailName)",
