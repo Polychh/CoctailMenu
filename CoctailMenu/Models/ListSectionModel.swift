@@ -10,7 +10,7 @@ enum ListSectionModel{
     case ingridients([Ingridiens])
     case coctailData([CoctailModel])
     
-    var ingredients: [Ingridiens] {
+    private var ingredients: [Ingridiens] {
           switch self {
           case .ingridients(let ingredients):
               return ingredients
@@ -19,7 +19,7 @@ enum ListSectionModel{
           }
       }
 
-      var cocktailData: [CoctailModel] {
+      private var cocktailData: [CoctailModel] {
           switch self {
           case .ingridients:
               return []

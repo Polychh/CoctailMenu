@@ -39,6 +39,7 @@ class HeaderView: UICollectionReusableView {
         NSLayoutConstraint.activate([
             headerLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             headerLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+            //headerLabel.heightAnchor.constraint(equalToConstant: 70),
         ])
     }
 }

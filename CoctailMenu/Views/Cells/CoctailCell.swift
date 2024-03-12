@@ -94,14 +94,14 @@ extension CoctailCell{
         
         NSLayoutConstraint.activate([
             
-            backView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            backView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
-            backView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
-            backView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+            backView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            backView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            backView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            backView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
                         
-            stack.topAnchor.constraint(equalTo: backView.topAnchor, constant: 4),
-            stack.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -4),
-            stack.bottomAnchor.constraint(equalTo: backView.bottomAnchor, constant: -4),
+            stack.topAnchor.constraint(equalTo: backView.topAnchor, constant: 6),
+            stack.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -6),
+            stack.bottomAnchor.constraint(equalTo: backView.bottomAnchor, constant: -6),
             stack.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 4),
         ])
     }

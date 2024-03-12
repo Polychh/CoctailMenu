@@ -14,7 +14,7 @@ final class IngridientCell: UICollectionViewCell {
         label.textAlignment = .left
         label.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         label.numberOfLines = 1
-        label.font = .systemFont(ofSize: 18, weight: .bold)
+        label.font = .systemFont(ofSize: 16, weight: .bold)
         label.sizeToFit()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -70,9 +70,10 @@ extension IngridientCell{
             ingridientBackImage.topAnchor.constraint(equalTo: contentView.topAnchor),
             ingridientBackImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
-            ingridientLabel.leadingAnchor.constraint(equalTo: ingridientBackImage.leadingAnchor, constant: 12),
-            ingridientLabel.trailingAnchor.constraint(equalTo: ingridientBackImage.trailingAnchor , constant: -12),
-            ingridientLabel.bottomAnchor.constraint(equalTo: ingridientBackImage.bottomAnchor, constant: -12)
+            ingridientLabel.centerXAnchor.constraint(equalTo: ingridientBackImage.centerXAnchor),
+            ingridientLabel.centerYAnchor.constraint(equalTo: ingridientBackImage.centerYAnchor),
+//            ingridientLabel.trailingAnchor.constraint(equalTo: ingridientBackImage.trailingAnchor , constant: -5),
+//            ingridientLabel.bottomAnchor.constraint(equalTo: ingridientBackImage.bottomAnchor, constant: -5)
         ])
     }
 }

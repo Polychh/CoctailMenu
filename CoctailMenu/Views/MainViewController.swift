@@ -33,6 +33,7 @@ class MainViewController: UIViewController {
     
     private func observeData(){
         viewModel.$dataCoctailsForSections
+            .dropFirst() //отбрасываем пустой массив
             .receive(on: DispatchQueue.main)
             .sink { [weak self] data in
                 guard let self else {return}
@@ -68,6 +69,7 @@ private extension MainViewController {
         collectionView.bounces = false
         collectionView.delegate = self
         collectionView.dataSource = self
+        collectionView.collectionViewLayout = createLayout()
         collectionView.register(IngridientCell.self, forCellWithReuseIdentifier: IngridientCell.resuseID)
         collectionView.register(CoctailCell.self, forCellWithReuseIdentifier: CoctailCell.resuseID)
         collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderView.resuseID)
@@ -81,6 +83,48 @@ private extension MainViewController{
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
     }
+}
+
+//MARK: - Create CollectionViewLayput
+private extension MainViewController{
+    private func createLayout() -> UICollectionViewCompositionalLayout{
+        UICollectionViewCompositionalLayout { [weak self] sectionIndex, _ in
+            guard let self else { return nil }
+            let section = viewModel.dataCoctailsForSections[sectionIndex]
+            switch section{
+            case .ingridients(_):
+                return createIngridientsSectionLayout()
+            case .coctailData(_):
+                return createCoctailDataSectionLayout()
+            }
+        }
+    }
+    
+    private func createIngridientsSectionLayout() -> NSCollectionLayoutSection{
+        let item = CompositionLayout.createItem(width: .fractionalWidth(1), height: .fractionalHeight(1), spacing: 0)
+        let group = CompositionLayout.createGroup(alignment: .horizontal, width: .absolute(110), height: .absolute(40), subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .continuous
+        section.interGroupSpacing = 10
+        section.contentInsets = .init(top: 0, leading: 10, bottom: 0, trailing: 10)
+        section.boundarySupplementaryItems = [createHeader()]
+        return section
+    }
+    
+    private func createCoctailDataSectionLayout() -> NSCollectionLayoutSection{
+        let item = CompositionLayout.createItem(width: .fractionalWidth(0.5), height: .fractionalHeight(1), spacing: 5)
+        let group = CompositionLayout.createGroup(alignment: .horizontal, width: .fractionalWidth(1), height: .fractionalHeight(0.2), subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = .init(top: 0, leading: 10, bottom: 0, trailing: 10)
+        section.boundarySupplementaryItems = [createHeader()]
+        return section
+    }
+    
+    private func createHeader() -> NSCollectionLayoutBoundarySupplementaryItem{
+        .init(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(30)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+        
+    }
+   
 }
 
 //MARK: - UICollectionViewDelegate, UICollectionViewDataSource
@@ -120,7 +164,6 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             header.configureHeader(sectionTitle: viewModel.dataCoctailsForSections[indexPath.section].title)
             return header
         default:
-            print("default Header")
             return UICollectionReusableView()
         }
     }
