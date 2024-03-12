@@ -16,7 +16,7 @@ enum HTTPMethod: String {
 }
 
 enum Param{
-    case name
+    case coctailName
     case ingridients
 }
 
