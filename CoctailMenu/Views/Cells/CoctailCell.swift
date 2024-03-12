@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class CoctailCell: UITableViewCell {
+final class CoctailCell: UICollectionViewCell {
     static let resuseID = "CoctailCell"
     
     private let coctailNameLabel = UILabel()
@@ -29,8 +29,8 @@ final class CoctailCell: UITableViewCell {
         return view
     }()
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         setUpUIElements()
         setConstrains()
     }

@@ -33,7 +33,7 @@ struct CoctailRequest: CoctailRequestProtocol{
     
     var headers: [String : String]?{
         let headers = [
-            "X-Api-Key": "wxtyeSNfBjqN3so2bKQLlobqLoQJMB12ALwi4BID",
+            "X-Api-Key": "xVzZjnKCS4dTGlGrdpYDVy9B3LitCsxjCQX5vVjx",
         ]
         return headers
     }

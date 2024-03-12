@@ -16,6 +16,7 @@ final class MainViewModel{
     
     init(){
         addIngridienstForSection()
+        getIngridientsData(ingridient: "Vodka")
     }
     
     func getCoctailData(searchWord: String){
