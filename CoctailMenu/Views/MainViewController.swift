@@ -13,6 +13,7 @@ class MainViewController: UIViewController {
     private var cancellables = Set<AnyCancellable>()
     private let searchController = CoctailSearchController(searchResultsController: nil)
     private let activityIndicator = UIActivityIndicatorView(frame: .zero)
+    private var selectedIndexPath: IndexPath?
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -32,32 +33,37 @@ class MainViewController: UIViewController {
     }
     
     private func observeData(){
-//        viewModel.$dataCoctailsForSections
-//            .dropFirst() //отбрасываем пустой массив
-//            .receive(on: DispatchQueue.main)
-//            .sink { [weak self] data in
-//                guard let self else {return}
-//                if viewModel.isLoaded {
-//                    collectionView.reloadData()
-//                }
-//                print("get data \(data)")
-//            }
-//            .store(in: &cancellables)
         viewModel.$isLoaded
-            //.dropFirst() //если уберу запрос в сеть через init ViewModel
+            .dropFirst()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isLoaded in
                 guard let self else {return}
-                if isLoaded {
-                    activityIndicator.stopAnimating()
-                    collectionView.reloadData()
-                } else {
-                    activityIndicator.startAnimating()
-                }
-
-//                isLoaded ? activityIndicator.stopAnimating() : activityIndicator.startAnimating()
+                actionForUI(isLoaded: isLoaded)
             }
             .store(in: &cancellables)
+        
+        viewModel.$dataCoctailsForSections
+            .dropFirst()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] data in
+                guard let self else {return}
+                print("data.count \(data.count)")
+//                if data.count > 2{
+//                    viewModel.removeSection()
+//                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func actionForUI(isLoaded: Bool){
+        if isLoaded {
+            activityIndicator.stopAnimating()
+            collectionView.isUserInteractionEnabled = true
+            collectionView.reloadData()
+        } else {
+            collectionView.isUserInteractionEnabled = false
+            activityIndicator.startAnimating()
+        }
     }
 }
 
@@ -127,27 +133,31 @@ private extension MainViewController{
    
 }
 
-//MARK: - UICollectionViewDelegate, UICollectionViewDataSource
-extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource{
+//MARK: - UICollectionViewDataSource
+extension MainViewController: UICollectionViewDataSource{
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         viewModel.dataCoctailsForSections.count
     }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section{
         case 0: return viewModel.dataCoctailsForSections[section].countIngridient
         case 1: return viewModel.dataCoctailsForSections[section].countCoctailData
         default:
-            print("Default")
+            print("Default section")
             return 0
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch viewModel.dataCoctailsForSections[indexPath.section]{
-            
         case .ingridients(let ingridients):
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IngridientCell.resuseID, for: indexPath) as? IngridientCell else { return UICollectionViewCell() }
+
             cell.configCell(ingridientLabelText: ingridients[indexPath.row].title)
+            if let selectedIndexPath = selectedIndexPath, selectedIndexPath == indexPath {
+                cell.color = #colorLiteral(red: 0.9843137255, green: 0.5333333333, blue: 0.7058823529, alpha: 1)
+            }
             return cell
         case .coctailData(let coctailData):
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CoctailCell.resuseID, for: indexPath) as? CoctailCell else { return UICollectionViewCell() }
@@ -165,6 +175,26 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             return header
         default:
             return UICollectionReusableView()
+        }
+    }
+}
+
+//MARK: - UICollectionViewDelegate
+extension MainViewController: UICollectionViewDelegate{
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        switch viewModel.dataCoctailsForSections[indexPath.section]{
+        case .ingridients(let ingridients):
+            if let previousSelectedIndexPath = selectedIndexPath, previousSelectedIndexPath != indexPath {
+                // Update the color of the previously selected cell
+                if let previousCell = collectionView.cellForItem(at: previousSelectedIndexPath) as? IngridientCell {
+                    previousCell.color = #colorLiteral(red: 1, green: 0.3176470588, blue: 0.1843137255, alpha: 1)
+                }
+            }
+            selectedIndexPath = indexPath
+            guard let cell = collectionView.cellForItem(at: indexPath) as? IngridientCell else { return }
+            cell.color = #colorLiteral(red: 0.9843137255, green: 0.5333333333, blue: 0.7058823529, alpha: 1)
+            viewModel.getIngridientsData(ingridient: ingridients[indexPath.row].title)
+        case .coctailData(_): break
         }
     }
 }
@@ -201,5 +231,6 @@ private extension MainViewController {
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
+        view.bringSubviewToFront(activityIndicator)
     }
 }

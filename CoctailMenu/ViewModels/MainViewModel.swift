@@ -9,10 +9,9 @@ import Foundation
 
 final class MainViewModel{
     
-    @Published var dataCoctailsForSections: [ListSectionModel] = .init()
     @Published var isLoaded: Bool = false
+    @Published var dataCoctailsForSections: [ListSectionModel] = .init()
     private let network: NetworkMangerProtocol = NetworkManager()
-    //private var dataCoctailOrIngredient: [CoctailModel] = .init()
     
     init(){
         addIngridienstForSection()
@@ -30,6 +29,10 @@ final class MainViewModel{
          fetchCoctailData(request: request)
     }
     
+    func removeSection(){
+        dataCoctailsForSections.removeLast()
+    }
+    
     private func addIngridienstForSection(){
         dataCoctailsForSections.append(.ingridients(IngridiensModel.getIngridients()))
     }
@@ -45,7 +48,6 @@ final class MainViewModel{
         Task{ @MainActor in
             do{
                 checkDataCoctailsForSections()
-                //dataCoctailOrIngredient = []
                 let dataCoctailOrIngredient = try await network.request(request)
                 dataCoctailsForSections.append(.coctailData(dataCoctailOrIngredient))
                 isLoaded = true

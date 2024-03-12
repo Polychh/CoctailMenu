@@ -6,8 +6,11 @@
 //
 
 import UIKit
+import Combine
 final class IngridientCell: UICollectionViewCell {
     static let resuseID = "IngridientCell"
+    @Published var color = UIColor.clear
+    private var cancellables = Set<AnyCancellable>()
     
     private let ingridientLabel: UILabel = {
         let label = UILabel()
@@ -32,6 +35,7 @@ final class IngridientCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        observeCell()
         setConstrains()
     }
   
@@ -42,6 +46,17 @@ final class IngridientCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         ingridientLabel.text = nil
+    }
+    
+    private func observeCell(){
+        $color
+            .dropFirst()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] color in
+                guard let self else {return}
+                ingridientBackImage.applyGradientMask(colors: [color, #colorLiteral(red: 0.8666666667, green: 0.1411764706, blue: 0.462745098, alpha: 1)], locations: [0.2, 1.0])
+            }
+            .store(in: &cancellables)
     }
     
     private func applyGradient(){
@@ -72,8 +87,6 @@ extension IngridientCell{
             
             ingridientLabel.centerXAnchor.constraint(equalTo: ingridientBackImage.centerXAnchor),
             ingridientLabel.centerYAnchor.constraint(equalTo: ingridientBackImage.centerYAnchor),
-//            ingridientLabel.trailingAnchor.constraint(equalTo: ingridientBackImage.trailingAnchor , constant: -5),
-//            ingridientLabel.bottomAnchor.constraint(equalTo: ingridientBackImage.bottomAnchor, constant: -5)
         ])
     }
 }
