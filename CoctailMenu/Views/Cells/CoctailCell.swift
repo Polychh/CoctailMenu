@@ -41,13 +41,13 @@ final class CoctailCell: UICollectionViewCell {
     
     private func setUpUIElements(){
         configLabel(label: coctailNameLabel, sizeText: 18, weithText: .bold, lines: 1, alignment: .left, color: .black)
-        configLabel(label: ingridientsLabel, sizeText: 16, weithText: .regular, lines: 2, alignment: .left, color: .black)
-        configLabel(label: instructionLabel, sizeText: 12, weithText: .regular, lines: 3, alignment: .left, color: .black)
+        configLabel(label: ingridientsLabel, sizeText: 16, weithText: .regular, lines: 3, alignment: .left, color: .black)
+        configLabel(label: instructionLabel, sizeText: 12, weithText: .regular, lines: 5, alignment: .left, color: .black)
         configStack(stack: stack)
     }
     
     private func configStack(stack: UIStackView){
-        stack.alignment = .center
+        stack.alignment = .leading
         stack.axis = .vertical
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.distribution = .equalSpacing
@@ -59,6 +59,7 @@ final class CoctailCell: UICollectionViewCell {
         label.textColor = color
         label.numberOfLines = lines
         label.font = .systemFont(ofSize: sizeText, weight: weithText)
+        label.lineBreakMode = .byTruncatingTail
         label.adjustsFontSizeToFitWidth = true // Enable font size adjustment
         label.minimumScaleFactor = 0.8 // Set the minimum scale factor
         label.sizeToFit()

@@ -32,23 +32,30 @@ class MainViewController: UIViewController {
     }
     
     private func observeData(){
-        viewModel.$dataCoctailsForSections
-            .dropFirst() //отбрасываем пустой массив
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] data in
-                guard let self else {return}
-                if viewModel.isLoaded {
-                    collectionView.reloadData()
-                }
-                print("get data \(data)")
-            }
-            .store(in: &cancellables)
+//        viewModel.$dataCoctailsForSections
+//            .dropFirst() //отбрасываем пустой массив
+//            .receive(on: DispatchQueue.main)
+//            .sink { [weak self] data in
+//                guard let self else {return}
+//                if viewModel.isLoaded {
+//                    collectionView.reloadData()
+//                }
+//                print("get data \(data)")
+//            }
+//            .store(in: &cancellables)
         viewModel.$isLoaded
-            //.dropFirst() //если уберу запрос в сеть иp init ViewModel
+            //.dropFirst() //если уберу запрос в сеть через init ViewModel
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isLoaded in
                 guard let self else {return}
-                isLoaded ? activityIndicator.stopAnimating() : activityIndicator.startAnimating()
+                if isLoaded {
+                    activityIndicator.stopAnimating()
+                    collectionView.reloadData()
+                } else {
+                    activityIndicator.startAnimating()
+                }
+
+//                isLoaded ? activityIndicator.stopAnimating() : activityIndicator.startAnimating()
             }
             .store(in: &cancellables)
     }
@@ -102,27 +109,20 @@ private extension MainViewController{
     
     private func createIngridientsSectionLayout() -> NSCollectionLayoutSection{
         let item = CompositionLayout.createItem(width: .fractionalWidth(1), height: .fractionalHeight(1), spacing: 0)
-        let group = CompositionLayout.createGroup(alignment: .horizontal, width: .absolute(110), height: .absolute(40), subitems: [item])
-        let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .continuous
-        section.interGroupSpacing = 10
-        section.contentInsets = .init(top: 0, leading: 10, bottom: 0, trailing: 10)
-        section.boundarySupplementaryItems = [createHeader()]
+        let group = CompositionLayout.createGroup(alignment: .horizontal, width: .estimated(110), height: .estimated(40), subitems: [item])
+        let section = CompositionLayout.createSection(group: group, scrollBehavior: .continuous, groupSpacing: 10, leading: 10, trailing: 10, supplementary: [createHeader()])
         return section
     }
     
     private func createCoctailDataSectionLayout() -> NSCollectionLayoutSection{
         let item = CompositionLayout.createItem(width: .fractionalWidth(0.5), height: .fractionalHeight(1), spacing: 5)
         let group = CompositionLayout.createGroup(alignment: .horizontal, width: .fractionalWidth(1), height: .fractionalHeight(0.2), subitems: [item])
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = .init(top: 0, leading: 10, bottom: 0, trailing: 10)
-        section.boundarySupplementaryItems = [createHeader()]
+        let section = CompositionLayout.createSection(group: group, scrollBehavior: .none, groupSpacing: 0, leading: 10, trailing: 10, supplementary: [createHeader()])
         return section
     }
-    
+   
     private func createHeader() -> NSCollectionLayoutBoundarySupplementaryItem{
         .init(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(30)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-        
     }
    
 }
