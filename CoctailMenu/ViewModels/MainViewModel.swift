@@ -19,7 +19,6 @@ protocol MainViewModelProtocol{
     var dataCoctailsForSections: [ListSectionModel] { get }
     func getCoctailData(searchWord: String)
     func getIngridientsData(ingridient: String)
-    
 }
 
 final class MainViewModel: MainViewModelProtocol{
@@ -31,11 +30,9 @@ final class MainViewModel: MainViewModelProtocol{
     var indexPathCurentPublisher: Published<IndexPath>.Publisher { $indexPathCurent }
     
     var changeColorWhenReload: Bool = false
-    
     var dataCoctailsForSections: [ListSectionModel] = .init()
    
     private let network: NetworkMangerProtocol
-    private var cancellables = Set<AnyCancellable>()
     
     init(network: NetworkMangerProtocol){
         self.network = network

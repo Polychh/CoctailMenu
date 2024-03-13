@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 class MainViewController: UIViewController {
-    
+
     private var viewModel: MainViewModelProtocol
     private var cancellables = Set<AnyCancellable>()
     private let searchController = CoctailSearchController(searchResultsController: nil)
