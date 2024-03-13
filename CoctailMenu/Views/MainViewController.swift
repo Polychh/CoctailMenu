@@ -9,12 +9,11 @@ import UIKit
 import Combine
 class MainViewController: UIViewController {
     
-    private let viewModel: MainViewModelProtocol
+    private var viewModel: MainViewModelProtocol
     private var cancellables = Set<AnyCancellable>()
     private let searchController = CoctailSearchController(searchResultsController: nil)
     private let activityIndicator = UIActivityIndicatorView(frame: .zero)
-    private var selectedIndexPath: IndexPath?
-    private var serchText: String?
+    
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -54,11 +53,38 @@ class MainViewController: UIViewController {
         viewModel.isLoadedPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isLoaded in
-                guard let self else {return}
+                guard let self else { return }
                 actionForUI(isLoaded: isLoaded)
-                print("searchtext \(serchText)")
             }
             .store(in: &cancellables)
+        
+        viewModel.selectedIndexPathPublisher
+            .dropFirst()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] index in
+                guard let self else { return }
+                guard let cell = collectionView.cellForItem(at: index) as? IngridientCell else { return }
+                    cell.color = #colorLiteral(red: 0.9843137255, green: 0.5333333333, blue: 0.7058823529, alpha: 1) //change collor when sellect cell
+            }
+            .store(in: &cancellables)
+        
+        viewModel.indexPathCurentPublisher
+            .dropFirst()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] index in
+                guard let self else {return}
+                if  viewModel.serchText.isEmpty, viewModel.selectedIndexPath == index{
+                    guard let cell = collectionView.cellForItem(at: index) as? IngridientCell else { return }
+                    if viewModel.changeColorWhenReload {
+                        cell.color = #colorLiteral(red: 1, green: 0.3176470588, blue: 0.1843137255, alpha: 1)
+                        viewModel.changeColorWhenReload = false
+                    } else {
+                        cell.color = #colorLiteral(red: 0.9843137255, green: 0.5333333333, blue: 0.7058823529, alpha: 1) // for cell with stored index change color in selected color when reload collectionView
+                    }
+                }
+            }
+            .store(in: &cancellables)
+        
     }
     
     private func actionForUI(isLoaded: Bool){
@@ -167,9 +193,7 @@ extension MainViewController: UICollectionViewDataSource{
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IngridientCell.resuseID, for: indexPath) as? IngridientCell else { return UICollectionViewCell() }
 
             cell.configCell(ingridientLabelText: ingridients[indexPath.row].title)
-            if let selectedIndexPath = selectedIndexPath, serchText == nil, selectedIndexPath == indexPath{
-                cell.color = #colorLiteral(red: 0.9843137255, green: 0.5333333333, blue: 0.7058823529, alpha: 1) // for cell with stored index change color in selected color when reload collectionView
-            }
+            viewModel.indexPathCurent = indexPath // save current indexPath
             return cell
         case .coctailData(let coctailData):
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CoctailCell.resuseID, for: indexPath) as? CoctailCell else { return UICollectionViewCell() }
@@ -196,16 +220,7 @@ extension MainViewController: UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch viewModel.dataCoctailsForSections[indexPath.section]{
         case .ingridients(let ingridients):
-            if let previousSelectedIndexPath = selectedIndexPath, previousSelectedIndexPath != indexPath {
-                // Update the color of the previously selected cell
-                if let previousCell = collectionView.cellForItem(at: previousSelectedIndexPath) as? IngridientCell {
-                    previousCell.color = #colorLiteral(red: 1, green: 0.3176470588, blue: 0.1843137255, alpha: 1)
-                }
-            }
-            
-            selectedIndexPath = indexPath // store index for selected cell
-            guard let cell = collectionView.cellForItem(at: indexPath) as? IngridientCell else { return }
-            cell.color = #colorLiteral(red: 0.9843137255, green: 0.5333333333, blue: 0.7058823529, alpha: 1) //change collor when sellect cell
+            viewModel.selectedIndexPath = indexPath // // save selected IndexPath
             viewModel.getIngridientsData(ingridient: ingridients[indexPath.row].title)
         case .coctailData(_): break
         }
@@ -216,7 +231,10 @@ extension MainViewController: UICollectionViewDelegate{
 extension MainViewController:  UISearchControllerDelegate, UISearchBarDelegate{
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchText = searchBar.text, !searchText.isEmpty else { return }
-        self.serchText = searchText
+        viewModel.serchText = searchText // store searchText
+        viewModel.changeColorWhenReload = true
+        viewModel.serchText = .init()
+        searchController.searchBar.text = ""
         viewModel.getCoctailData(searchWord: searchText)
         searchBar.resignFirstResponder()
     }
