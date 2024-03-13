@@ -21,6 +21,14 @@ class MainViewController: UIViewController {
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         return view
     }()
+    
+    private let blurView: UIVisualEffectView = {
+        let blurEffect = UIBlurEffect(style: .light)
+        let view = UIVisualEffectView(effect: blurEffect)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.alpha = 0
+        return view
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,27 +49,21 @@ class MainViewController: UIViewController {
                 actionForUI(isLoaded: isLoaded)
             }
             .store(in: &cancellables)
-        
-        viewModel.$dataCoctailsForSections
-            .dropFirst()
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] data in
-                guard let self else {return}
-                print("data.count \(data.count)")
-//                if data.count > 2{
-//                    viewModel.removeSection()
-//                }
-            }
-            .store(in: &cancellables)
     }
     
     private func actionForUI(isLoaded: Bool){
         if isLoaded {
             activityIndicator.stopAnimating()
+            UIView.animate(withDuration: 0.25) {
+                self.blurView.alpha = 0
+            }
             collectionView.isUserInteractionEnabled = true
             collectionView.reloadData()
         } else {
             collectionView.isUserInteractionEnabled = false
+            UIView.animate(withDuration: 0.25) {
+                self.blurView.alpha = 1
+            }
             activityIndicator.startAnimating()
         }
     }
@@ -156,7 +158,7 @@ extension MainViewController: UICollectionViewDataSource{
 
             cell.configCell(ingridientLabelText: ingridients[indexPath.row].title)
             if let selectedIndexPath = selectedIndexPath, selectedIndexPath == indexPath {
-                cell.color = #colorLiteral(red: 0.9843137255, green: 0.5333333333, blue: 0.7058823529, alpha: 1)
+                cell.color = #colorLiteral(red: 0.9843137255, green: 0.5333333333, blue: 0.7058823529, alpha: 1) // for cell with stored index change color in selected color when reload collectionView
             }
             return cell
         case .coctailData(let coctailData):
@@ -190,9 +192,9 @@ extension MainViewController: UICollectionViewDelegate{
                     previousCell.color = #colorLiteral(red: 1, green: 0.3176470588, blue: 0.1843137255, alpha: 1)
                 }
             }
-            selectedIndexPath = indexPath
+            selectedIndexPath = indexPath // store index for selected cell
             guard let cell = collectionView.cellForItem(at: indexPath) as? IngridientCell else { return }
-            cell.color = #colorLiteral(red: 0.9843137255, green: 0.5333333333, blue: 0.7058823529, alpha: 1)
+            cell.color = #colorLiteral(red: 0.9843137255, green: 0.5333333333, blue: 0.7058823529, alpha: 1) //change collor when sellect cell
             viewModel.getIngridientsData(ingridient: ingridients[indexPath.row].title)
         case .coctailData(_): break
         }
@@ -221,6 +223,8 @@ private extension MainViewController {
     func setConstraints() {
         view.addSubview(activityIndicator)
         view.addSubview(collectionView)
+        view.addSubview(blurView)
+        view.bringSubviewToFront(activityIndicator)
         
         NSLayoutConstraint.activate([
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -230,7 +234,12 @@ private extension MainViewController {
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -5),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            blurView.topAnchor.constraint(equalTo: view.topAnchor),
+                       blurView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                       blurView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                       blurView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
-        view.bringSubviewToFront(activityIndicator)
+       
     }
 }

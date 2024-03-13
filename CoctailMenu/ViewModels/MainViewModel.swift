@@ -10,7 +10,7 @@ import Foundation
 final class MainViewModel{
     
     @Published var isLoaded: Bool = false
-    @Published var dataCoctailsForSections: [ListSectionModel] = .init()
+    var dataCoctailsForSections: [ListSectionModel] = .init()
     private let network: NetworkMangerProtocol = NetworkManager()
     
     init(){
