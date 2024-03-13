@@ -7,13 +7,21 @@
 
 import Foundation
 
-final class MainViewModel{
-    
+protocol MainViewModelProtocol{
+    var isLoadedPublisher: Published<Bool>.Publisher { get }
+    var dataCoctailsForSections: [ListSectionModel] { get }
+    func getCoctailData(searchWord: String)
+    func getIngridientsData(ingridient: String)
+}
+
+final class MainViewModel: MainViewModelProtocol{
     @Published var isLoaded: Bool = false
+    var isLoadedPublisher: Published<Bool>.Publisher { $isLoaded }
     var dataCoctailsForSections: [ListSectionModel] = .init()
-    private let network: NetworkMangerProtocol = NetworkManager()
+    private let network: NetworkMangerProtocol
     
-    init(){
+    init(network: NetworkMangerProtocol){
+        self.network = network
         addIngridienstForSection()
         getIngridientsData(ingridient: "Vodka")
     }
@@ -28,11 +36,7 @@ final class MainViewModel{
         let request = CoctailRequest(cotailName: nil, ingridients: ingridient, paramToChoose: .ingridients)
          fetchCoctailData(request: request)
     }
-    
-    func removeSection(){
-        dataCoctailsForSections.removeLast()
-    }
-    
+        
     private func addIngridienstForSection(){
         dataCoctailsForSections.append(.ingridients(IngridiensModel.getIngridients()))
     }

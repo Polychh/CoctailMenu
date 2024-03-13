@@ -9,11 +9,12 @@ import UIKit
 import Combine
 class MainViewController: UIViewController {
     
-    private let viewModel = MainViewModel()
+    private let viewModel: MainViewModelProtocol
     private var cancellables = Set<AnyCancellable>()
     private let searchController = CoctailSearchController(searchResultsController: nil)
     private let activityIndicator = UIActivityIndicatorView(frame: .zero)
     private var selectedIndexPath: IndexPath?
+    private var serchText: String?
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -29,7 +30,16 @@ class MainViewController: UIViewController {
         view.alpha = 0
         return view
     }()
-
+    
+    init(viewModel: MainViewModelProtocol) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -41,12 +51,12 @@ class MainViewController: UIViewController {
     }
     
     private func observeData(){
-        viewModel.$isLoaded
-            .dropFirst()
+        viewModel.isLoadedPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isLoaded in
                 guard let self else {return}
                 actionForUI(isLoaded: isLoaded)
+                print("searchtext \(serchText)")
             }
             .store(in: &cancellables)
     }
@@ -157,7 +167,7 @@ extension MainViewController: UICollectionViewDataSource{
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IngridientCell.resuseID, for: indexPath) as? IngridientCell else { return UICollectionViewCell() }
 
             cell.configCell(ingridientLabelText: ingridients[indexPath.row].title)
-            if let selectedIndexPath = selectedIndexPath, selectedIndexPath == indexPath {
+            if let selectedIndexPath = selectedIndexPath, serchText == nil, selectedIndexPath == indexPath{
                 cell.color = #colorLiteral(red: 0.9843137255, green: 0.5333333333, blue: 0.7058823529, alpha: 1) // for cell with stored index change color in selected color when reload collectionView
             }
             return cell
@@ -192,6 +202,7 @@ extension MainViewController: UICollectionViewDelegate{
                     previousCell.color = #colorLiteral(red: 1, green: 0.3176470588, blue: 0.1843137255, alpha: 1)
                 }
             }
+            
             selectedIndexPath = indexPath // store index for selected cell
             guard let cell = collectionView.cellForItem(at: indexPath) as? IngridientCell else { return }
             cell.color = #colorLiteral(red: 0.9843137255, green: 0.5333333333, blue: 0.7058823529, alpha: 1) //change collor when sellect cell
@@ -205,6 +216,7 @@ extension MainViewController: UICollectionViewDelegate{
 extension MainViewController:  UISearchControllerDelegate, UISearchBarDelegate{
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchText = searchBar.text, !searchText.isEmpty else { return }
+        self.serchText = searchText
         viewModel.getCoctailData(searchWord: searchText)
         searchBar.resignFirstResponder()
     }
@@ -236,10 +248,9 @@ private extension MainViewController {
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
             blurView.topAnchor.constraint(equalTo: view.topAnchor),
-                       blurView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-                       blurView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                       blurView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            blurView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            blurView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            blurView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
-       
     }
 }
