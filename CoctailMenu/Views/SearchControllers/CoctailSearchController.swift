@@ -32,7 +32,7 @@ class CoctailSearchController: UISearchController {
         textField.clipsToBounds = true
         textField.leftView?.tintColor = color
         // Change color of placeholder text
-        let attributedPlaceholder = NSAttributedString(string: "Searc Coctail", attributes: [NSAttributedString.Key.foregroundColor: color])
+        let attributedPlaceholder = NSAttributedString(string: "Search Coctail", attributes: [NSAttributedString.Key.foregroundColor: color])
         textField.attributedPlaceholder = attributedPlaceholder
    }
     

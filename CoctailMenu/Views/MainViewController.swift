@@ -8,12 +8,12 @@
 import UIKit
 import Combine
 class MainViewController: UIViewController {
-    
-    private let viewModel = MainViewModel()
+
+    private var viewModel: MainViewModelProtocol
     private var cancellables = Set<AnyCancellable>()
     private let searchController = CoctailSearchController(searchResultsController: nil)
     private let activityIndicator = UIActivityIndicatorView(frame: .zero)
-    private var selectedIndexPath: IndexPath?
+    
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -21,7 +21,24 @@ class MainViewController: UIViewController {
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         return view
     }()
-
+    
+    private let blurView: UIVisualEffectView = {
+        let blurEffect = UIBlurEffect(style: .light)
+        let view = UIVisualEffectView(effect: blurEffect)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.alpha = 0
+        return view
+    }()
+    
+    init(viewModel: MainViewModelProtocol) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -33,35 +50,54 @@ class MainViewController: UIViewController {
     }
     
     private func observeData(){
-        viewModel.$isLoaded
-            .dropFirst()
+        viewModel.isLoadedPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isLoaded in
-                guard let self else {return}
+                guard let self else { return }
                 actionForUI(isLoaded: isLoaded)
             }
             .store(in: &cancellables)
         
-        viewModel.$dataCoctailsForSections
+        viewModel.selectedIndexPathPublisher
             .dropFirst()
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] data in
-                guard let self else {return}
-                print("data.count \(data.count)")
-//                if data.count > 2{
-//                    viewModel.removeSection()
-//                }
+            .sink { [weak self] index in
+                guard let self else { return }
+                guard let cell = collectionView.cellForItem(at: index) as? IngridientCell else { return }
+                    cell.color = #colorLiteral(red: 0.9843137255, green: 0.5333333333, blue: 0.7058823529, alpha: 1) //change collor when sellect cell
             }
             .store(in: &cancellables)
+        
+        viewModel.indexPathCurentPublisher
+            .dropFirst()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] index in
+                guard let self, viewModel.selectedIndexPath == index else { return }
+                guard let cell = collectionView.cellForItem(at: index) as? IngridientCell else { return }
+                if viewModel.changeColorWhenReload {
+                    cell.color = #colorLiteral(red: 1, green: 0.3176470588, blue: 0.1843137255, alpha: 1)
+                    viewModel.changeColorWhenReload = false
+                } else {
+                    cell.color = #colorLiteral(red: 0.9843137255, green: 0.5333333333, blue: 0.7058823529, alpha: 1) // for cell with stored index change color in selected color when reload collectionView
+                }
+            }
+            .store(in: &cancellables)
+        
     }
     
     private func actionForUI(isLoaded: Bool){
         if isLoaded {
             activityIndicator.stopAnimating()
+            UIView.animate(withDuration: 0.25) {
+                self.blurView.alpha = 0
+            }
             collectionView.isUserInteractionEnabled = true
             collectionView.reloadData()
         } else {
             collectionView.isUserInteractionEnabled = false
+            UIView.animate(withDuration: 0.25) {
+                self.blurView.alpha = 1
+            }
             activityIndicator.startAnimating()
         }
     }
@@ -130,7 +166,6 @@ private extension MainViewController{
     private func createHeader() -> NSCollectionLayoutBoundarySupplementaryItem{
         .init(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(30)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
     }
-   
 }
 
 //MARK: - UICollectionViewDataSource
@@ -153,11 +188,8 @@ extension MainViewController: UICollectionViewDataSource{
         switch viewModel.dataCoctailsForSections[indexPath.section]{
         case .ingridients(let ingridients):
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IngridientCell.resuseID, for: indexPath) as? IngridientCell else { return UICollectionViewCell() }
-
             cell.configCell(ingridientLabelText: ingridients[indexPath.row].title)
-            if let selectedIndexPath = selectedIndexPath, selectedIndexPath == indexPath {
-                cell.color = #colorLiteral(red: 0.9843137255, green: 0.5333333333, blue: 0.7058823529, alpha: 1)
-            }
+            viewModel.indexPathCurent = indexPath // save current indexPath
             return cell
         case .coctailData(let coctailData):
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CoctailCell.resuseID, for: indexPath) as? CoctailCell else { return UICollectionViewCell() }
@@ -184,15 +216,7 @@ extension MainViewController: UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch viewModel.dataCoctailsForSections[indexPath.section]{
         case .ingridients(let ingridients):
-            if let previousSelectedIndexPath = selectedIndexPath, previousSelectedIndexPath != indexPath {
-                // Update the color of the previously selected cell
-                if let previousCell = collectionView.cellForItem(at: previousSelectedIndexPath) as? IngridientCell {
-                    previousCell.color = #colorLiteral(red: 1, green: 0.3176470588, blue: 0.1843137255, alpha: 1)
-                }
-            }
-            selectedIndexPath = indexPath
-            guard let cell = collectionView.cellForItem(at: indexPath) as? IngridientCell else { return }
-            cell.color = #colorLiteral(red: 0.9843137255, green: 0.5333333333, blue: 0.7058823529, alpha: 1)
+            viewModel.selectedIndexPath = indexPath // // save selected IndexPath
             viewModel.getIngridientsData(ingridient: ingridients[indexPath.row].title)
         case .coctailData(_): break
         }
@@ -203,6 +227,8 @@ extension MainViewController: UICollectionViewDelegate{
 extension MainViewController:  UISearchControllerDelegate, UISearchBarDelegate{
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchText = searchBar.text, !searchText.isEmpty else { return }
+        viewModel.changeColorWhenReload = true // flag for change cell color for default when reload collectionView
+        searchController.searchBar.text = "" //clean for next search
         viewModel.getCoctailData(searchWord: searchText)
         searchBar.resignFirstResponder()
     }
@@ -221,6 +247,8 @@ private extension MainViewController {
     func setConstraints() {
         view.addSubview(activityIndicator)
         view.addSubview(collectionView)
+        view.addSubview(blurView)
+        view.bringSubviewToFront(activityIndicator)
         
         NSLayoutConstraint.activate([
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -230,7 +258,11 @@ private extension MainViewController {
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -5),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            blurView.topAnchor.constraint(equalTo: view.topAnchor),
+            blurView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            blurView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            blurView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
-        view.bringSubviewToFront(activityIndicator)
     }
 }

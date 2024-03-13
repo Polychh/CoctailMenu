@@ -6,14 +6,36 @@
 //
 
 import Foundation
+import Combine
 
-final class MainViewModel{
+protocol MainViewModelProtocol{
+    var isLoadedPublisher: Published<Bool>.Publisher { get }
+    var selectedIndexPathPublisher: Published<IndexPath>.Publisher { get }
+    var indexPathCurentPublisher: Published<IndexPath>.Publisher { get }
+    var selectedIndexPath: IndexPath { get set }
+    var indexPathCurent: IndexPath { get set }
     
+    var changeColorWhenReload: Bool { get set}
+    var dataCoctailsForSections: [ListSectionModel] { get }
+    func getCoctailData(searchWord: String)
+    func getIngridientsData(ingridient: String)
+}
+
+final class MainViewModel: MainViewModelProtocol{
     @Published var isLoaded: Bool = false
-    @Published var dataCoctailsForSections: [ListSectionModel] = .init()
-    private let network: NetworkMangerProtocol = NetworkManager()
+    @Published var selectedIndexPath: IndexPath = .init()
+    @Published var indexPathCurent: IndexPath = .init()
+    var isLoadedPublisher: Published<Bool>.Publisher { $isLoaded }
+    var selectedIndexPathPublisher: Published<IndexPath>.Publisher { $selectedIndexPath }
+    var indexPathCurentPublisher: Published<IndexPath>.Publisher { $indexPathCurent }
     
-    init(){
+    var changeColorWhenReload: Bool = false
+    var dataCoctailsForSections: [ListSectionModel] = .init()
+   
+    private let network: NetworkMangerProtocol
+    
+    init(network: NetworkMangerProtocol){
+        self.network = network
         addIngridienstForSection()
         getIngridientsData(ingridient: "Vodka")
     }
@@ -28,11 +50,7 @@ final class MainViewModel{
         let request = CoctailRequest(cotailName: nil, ingridients: ingridient, paramToChoose: .ingridients)
          fetchCoctailData(request: request)
     }
-    
-    func removeSection(){
-        dataCoctailsForSections.removeLast()
-    }
-    
+        
     private func addIngridienstForSection(){
         dataCoctailsForSections.append(.ingridients(IngridiensModel.getIngridients()))
     }
