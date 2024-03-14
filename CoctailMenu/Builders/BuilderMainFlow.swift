@@ -8,11 +8,11 @@
 import UIKit
 
 protocol BuilderMainFlowProtocol{
-    func buildMainVC() -> UIViewController
+    func buildMainVC(router: RouterMainVCProtocol) -> UIViewController
 }
 
 final class BuilderMainFlow: BuilderMainFlowProtocol {
-    func buildMainVC() -> UIViewController {
+    func buildMainVC(router: RouterMainVCProtocol) -> UIViewController {
         let network = NetworkManager()
         let viewModel = MainViewModel(network: network)
         let vc = MainViewController(viewModel: viewModel)
