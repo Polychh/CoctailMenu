@@ -14,7 +14,6 @@ class MainViewController: UIViewController {
     private let searchController = CoctailSearchController(searchResultsController: nil)
     private let activityIndicator = UIActivityIndicatorView(frame: .zero)
     
-    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -49,7 +48,21 @@ class MainViewController: UIViewController {
         setConstraints()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.checkFavorities()
+    }
+    
     private func observeData(){
+        viewModel.favoritiesPublisher
+            .dropFirst()
+            .sink { [unowned self] dict in
+                let coctails = dict.filter({ $0.value == true }).map({ $0.key.name })
+                print("❤️ \(coctails)")
+                collectionView.reloadData()
+            }
+            .store(in: &cancellables)
+        
         viewModel.isLoadedPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isLoaded in
@@ -194,7 +207,10 @@ extension MainViewController: UICollectionViewDataSource{
         case .coctailData(let coctailData):
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CoctailCell.resuseID, for: indexPath) as? CoctailCell else { return UICollectionViewCell() }
             let data = coctailData[indexPath.row]
-            cell.configCell(nameCoctail: data.name, instruction: data.instructions, ingridients: data.ingredients)
+            cell.configCell(nameCoctail: data.name, instruction: data.instructions, ingridients: data.ingredients, isLiked: viewModel.favorities[data] ?? false)
+            cell.eventPublisher.sink { [weak self] event in
+                self?.viewModel.handleCellEvent(coctail: data, event: event)
+            }.store(in: &cell.cancellables)
             return cell
         }
     }

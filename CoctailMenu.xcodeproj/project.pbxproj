@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		36ACF5F92BA3339800BDE60A /* BuilderTabBarCoctail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36ACF5F82BA3339800BDE60A /* BuilderTabBarCoctail.swift */; };
+		36ACF5FB2BA333FF00BDE60A /* CoctailTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36ACF5FA2BA333FF00BDE60A /* CoctailTabBarController.swift */; };
+		36ACF5FE2BA334D900BDE60A /* RouterMainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36ACF5FD2BA334D900BDE60A /* RouterMainVC.swift */; };
+		36ACF6002BA3364100BDE60A /* FavoritiesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36ACF5FF2BA3364100BDE60A /* FavoritiesViewController.swift */; };
+		36ACF6022BA3366100BDE60A /* BuilderFavoritiesFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36ACF6012BA3366100BDE60A /* BuilderFavoritiesFlow.swift */; };
+		36ACF6042BA3367500BDE60A /* RouterFavoritiesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36ACF6032BA3367500BDE60A /* RouterFavoritiesVC.swift */; };
+		36ACF6072BA340E200BDE60A /* CoctailsSave.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 36ACF6052BA340E200BDE60A /* CoctailsSave.xcdatamodeld */; };
+		36ACF6092BA341B200BDE60A /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36ACF6082BA341B200BDE60A /* StoreManager.swift */; };
+		36ACF60B2BA355E300BDE60A /* FavoriteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36ACF60A2BA355E300BDE60A /* FavoriteCell.swift */; };
+		36ACF60D2BA3578C00BDE60A /* FavoritiesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36ACF60C2BA3578C00BDE60A /* FavoritiesViewModel.swift */; };
 		36E7A7B02B9F43580073E6B4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E7A7AF2B9F43580073E6B4 /* AppDelegate.swift */; };
 		36E7A7B22B9F43580073E6B4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E7A7B12B9F43580073E6B4 /* SceneDelegate.swift */; };
 		36E7A7B42B9F43580073E6B4 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E7A7B32B9F43580073E6B4 /* MainViewController.swift */; };
@@ -30,6 +40,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		36ACF5F82BA3339800BDE60A /* BuilderTabBarCoctail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuilderTabBarCoctail.swift; sourceTree = "<group>"; };
+		36ACF5FA2BA333FF00BDE60A /* CoctailTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoctailTabBarController.swift; sourceTree = "<group>"; };
+		36ACF5FD2BA334D900BDE60A /* RouterMainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterMainVC.swift; sourceTree = "<group>"; };
+		36ACF5FF2BA3364100BDE60A /* FavoritiesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritiesViewController.swift; sourceTree = "<group>"; };
+		36ACF6012BA3366100BDE60A /* BuilderFavoritiesFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuilderFavoritiesFlow.swift; sourceTree = "<group>"; };
+		36ACF6032BA3367500BDE60A /* RouterFavoritiesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterFavoritiesVC.swift; sourceTree = "<group>"; };
+		36ACF6062BA340E200BDE60A /* CoctailsSave.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoctailsSave.xcdatamodel; sourceTree = "<group>"; };
+		36ACF6082BA341B200BDE60A /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
+		36ACF60A2BA355E300BDE60A /* FavoriteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteCell.swift; sourceTree = "<group>"; };
+		36ACF60C2BA3578C00BDE60A /* FavoritiesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritiesViewModel.swift; sourceTree = "<group>"; };
 		36E7A7AC2B9F43580073E6B4 /* CoctailMenu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoctailMenu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		36E7A7AF2B9F43580073E6B4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		36E7A7B12B9F43580073E6B4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -65,6 +85,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		36ACF5FC2BA334C200BDE60A /* Routers */ = {
+			isa = PBXGroup;
+			children = (
+				36ACF5FD2BA334D900BDE60A /* RouterMainVC.swift */,
+				36ACF6032BA3367500BDE60A /* RouterFavoritiesVC.swift */,
+			);
+			path = Routers;
+			sourceTree = "<group>";
+		};
 		36E7A7A32B9F43570073E6B4 = {
 			isa = PBXGroup;
 			children = (
@@ -84,6 +113,7 @@
 		36E7A7AE2B9F43580073E6B4 /* CoctailMenu */ = {
 			isa = PBXGroup;
 			children = (
+				36ACF5FC2BA334C200BDE60A /* Routers */,
 				36E7A7EE2BA1AE940073E6B4 /* Builders */,
 				36E7A7E02B9F7FEB0073E6B4 /* Helpers */,
 				36E7A7CD2B9F506A0073E6B4 /* Services */,
@@ -105,6 +135,7 @@
 				36E7A7C52B9F4DCC0073E6B4 /* CoctailModel.swift */,
 				36E7A7DC2B9F72130073E6B4 /* IngridiensModel.swift */,
 				36E7A7DE2B9F74DF0073E6B4 /* ListSectionModel.swift */,
+				36ACF6052BA340E200BDE60A /* CoctailsSave.xcdatamodeld */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -116,6 +147,8 @@
 				36E7A7EA2BA057440073E6B4 /* Headers */,
 				36E7A7E32B9F87110073E6B4 /* Cells */,
 				36E7A7B32B9F43580073E6B4 /* MainViewController.swift */,
+				36ACF5FA2BA333FF00BDE60A /* CoctailTabBarController.swift */,
+				36ACF5FF2BA3364100BDE60A /* FavoritiesViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -124,6 +157,7 @@
 			isa = PBXGroup;
 			children = (
 				36E7A7CB2B9F50500073E6B4 /* MainViewModel.swift */,
+				36ACF60C2BA3578C00BDE60A /* FavoritiesViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -132,6 +166,7 @@
 			isa = PBXGroup;
 			children = (
 				36E7A7CE2B9F50730073E6B4 /* NetworkLayer */,
+				36ACF6082BA341B200BDE60A /* StoreManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -169,6 +204,7 @@
 			children = (
 				36E7A7E42B9F87280073E6B4 /* IngridientCell.swift */,
 				36E7A7E82B9F88970073E6B4 /* CoctailCell.swift */,
+				36ACF60A2BA355E300BDE60A /* FavoriteCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -192,7 +228,9 @@
 		36E7A7EE2BA1AE940073E6B4 /* Builders */ = {
 			isa = PBXGroup;
 			children = (
+				36ACF5F82BA3339800BDE60A /* BuilderTabBarCoctail.swift */,
 				36E7A7EF2BA1AEEF0073E6B4 /* BuilderMainFlow.swift */,
+				36ACF6012BA3366100BDE60A /* BuilderFavoritiesFlow.swift */,
 			);
 			path = Builders;
 			sourceTree = "<group>";
@@ -267,22 +305,32 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				36ACF60D2BA3578C00BDE60A /* FavoritiesViewModel.swift in Sources */,
 				36E7A7E52B9F87280073E6B4 /* IngridientCell.swift in Sources */,
 				36E7A7C62B9F4DCC0073E6B4 /* CoctailModel.swift in Sources */,
 				36E7A7D22B9F52100073E6B4 /* CoctailRequestProtocol.swift in Sources */,
+				36ACF5F92BA3339800BDE60A /* BuilderTabBarCoctail.swift in Sources */,
 				36E7A7DB2B9F5D5D0073E6B4 /* CoctailSearchController.swift in Sources */,
 				36E7A7E22B9F80110073E6B4 /* CompositionLayout.swift in Sources */,
+				36ACF6002BA3364100BDE60A /* FavoritiesViewController.swift in Sources */,
 				36E7A7D72B9F55110073E6B4 /* NetworkManager.swift in Sources */,
+				36ACF5FB2BA333FF00BDE60A /* CoctailTabBarController.swift in Sources */,
 				36E7A7EC2BA057830073E6B4 /* HeaderView.swift in Sources */,
 				36E7A7D02B9F519A0073E6B4 /* NetworkError.swift in Sources */,
+				36ACF6092BA341B200BDE60A /* StoreManager.swift in Sources */,
 				36E7A7F02BA1AEEF0073E6B4 /* BuilderMainFlow.swift in Sources */,
 				36E7A7DF2B9F74DF0073E6B4 /* ListSectionModel.swift in Sources */,
+				36ACF6072BA340E200BDE60A /* CoctailsSave.xcdatamodeld in Sources */,
+				36ACF60B2BA355E300BDE60A /* FavoriteCell.swift in Sources */,
 				36E7A7DD2B9F72130073E6B4 /* IngridiensModel.swift in Sources */,
 				36E7A7B42B9F43580073E6B4 /* MainViewController.swift in Sources */,
 				36E7A7B02B9F43580073E6B4 /* AppDelegate.swift in Sources */,
 				36E7A7E92B9F88970073E6B4 /* CoctailCell.swift in Sources */,
+				36ACF6042BA3367500BDE60A /* RouterFavoritiesVC.swift in Sources */,
 				36E7A7B22B9F43580073E6B4 /* SceneDelegate.swift in Sources */,
 				36E7A7D52B9F52440073E6B4 /* CoctailRequest.swift in Sources */,
+				36ACF6022BA3366100BDE60A /* BuilderFavoritiesFlow.swift in Sources */,
+				36ACF5FE2BA334D900BDE60A /* RouterMainVC.swift in Sources */,
 				36E7A7CC2B9F50500073E6B4 /* MainViewModel.swift in Sources */,
 				36E7A7E72B9F87D40073E6B4 /* UIImageView + ext.swift in Sources */,
 			);
@@ -497,6 +545,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		36ACF6052BA340E200BDE60A /* CoctailsSave.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				36ACF6062BA340E200BDE60A /* CoctailsSave.xcdatamodel */,
+			);
+			currentVersion = 36ACF6062BA340E200BDE60A /* CoctailsSave.xcdatamodel */;
+			path = CoctailsSave.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 36E7A7A42B9F43570073E6B4 /* Project object */;
 }
