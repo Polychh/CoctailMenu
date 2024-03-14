@@ -13,6 +13,8 @@
 		36ACF6002BA3364100BDE60A /* FavoritiesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36ACF5FF2BA3364100BDE60A /* FavoritiesViewController.swift */; };
 		36ACF6022BA3366100BDE60A /* BuilderFavoritiesFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36ACF6012BA3366100BDE60A /* BuilderFavoritiesFlow.swift */; };
 		36ACF6042BA3367500BDE60A /* RouterFavoritiesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36ACF6032BA3367500BDE60A /* RouterFavoritiesVC.swift */; };
+		36ACF6072BA340E200BDE60A /* CoctailsSave.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 36ACF6052BA340E200BDE60A /* CoctailsSave.xcdatamodeld */; };
+		36ACF6092BA341B200BDE60A /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36ACF6082BA341B200BDE60A /* StoreManager.swift */; };
 		36E7A7B02B9F43580073E6B4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E7A7AF2B9F43580073E6B4 /* AppDelegate.swift */; };
 		36E7A7B22B9F43580073E6B4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E7A7B12B9F43580073E6B4 /* SceneDelegate.swift */; };
 		36E7A7B42B9F43580073E6B4 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E7A7B32B9F43580073E6B4 /* MainViewController.swift */; };
@@ -42,6 +44,8 @@
 		36ACF5FF2BA3364100BDE60A /* FavoritiesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritiesViewController.swift; sourceTree = "<group>"; };
 		36ACF6012BA3366100BDE60A /* BuilderFavoritiesFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuilderFavoritiesFlow.swift; sourceTree = "<group>"; };
 		36ACF6032BA3367500BDE60A /* RouterFavoritiesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterFavoritiesVC.swift; sourceTree = "<group>"; };
+		36ACF6062BA340E200BDE60A /* CoctailsSave.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoctailsSave.xcdatamodel; sourceTree = "<group>"; };
+		36ACF6082BA341B200BDE60A /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
 		36E7A7AC2B9F43580073E6B4 /* CoctailMenu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoctailMenu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		36E7A7AF2B9F43580073E6B4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		36E7A7B12B9F43580073E6B4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -127,6 +131,7 @@
 				36E7A7C52B9F4DCC0073E6B4 /* CoctailModel.swift */,
 				36E7A7DC2B9F72130073E6B4 /* IngridiensModel.swift */,
 				36E7A7DE2B9F74DF0073E6B4 /* ListSectionModel.swift */,
+				36ACF6052BA340E200BDE60A /* CoctailsSave.xcdatamodeld */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -156,6 +161,7 @@
 			isa = PBXGroup;
 			children = (
 				36E7A7CE2B9F50730073E6B4 /* NetworkLayer */,
+				36ACF6082BA341B200BDE60A /* StoreManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -304,8 +310,10 @@
 				36ACF5FB2BA333FF00BDE60A /* CoctailTabBarController.swift in Sources */,
 				36E7A7EC2BA057830073E6B4 /* HeaderView.swift in Sources */,
 				36E7A7D02B9F519A0073E6B4 /* NetworkError.swift in Sources */,
+				36ACF6092BA341B200BDE60A /* StoreManager.swift in Sources */,
 				36E7A7F02BA1AEEF0073E6B4 /* BuilderMainFlow.swift in Sources */,
 				36E7A7DF2B9F74DF0073E6B4 /* ListSectionModel.swift in Sources */,
+				36ACF6072BA340E200BDE60A /* CoctailsSave.xcdatamodeld in Sources */,
 				36E7A7DD2B9F72130073E6B4 /* IngridiensModel.swift in Sources */,
 				36E7A7B42B9F43580073E6B4 /* MainViewController.swift in Sources */,
 				36E7A7B02B9F43580073E6B4 /* AppDelegate.swift in Sources */,
@@ -529,6 +537,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		36ACF6052BA340E200BDE60A /* CoctailsSave.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				36ACF6062BA340E200BDE60A /* CoctailsSave.xcdatamodel */,
+			);
+			currentVersion = 36ACF6062BA340E200BDE60A /* CoctailsSave.xcdatamodel */;
+			path = CoctailsSave.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 36E7A7A42B9F43570073E6B4 /* Project object */;
 }

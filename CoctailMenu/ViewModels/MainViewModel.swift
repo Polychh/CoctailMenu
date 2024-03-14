@@ -38,6 +38,7 @@ final class MainViewModel: MainViewModelProtocol{
     var dataCoctailsForSections: [ListSectionModel] = .init()
    
     private let network: NetworkMangerProtocol
+    private let storeManager: StoreManagerProtocol = StoreManager()
     
     init(network: NetworkMangerProtocol){
         self.network = network
@@ -55,17 +56,34 @@ final class MainViewModel: MainViewModelProtocol{
         let request = CoctailRequest(cotailName: nil, ingridients: ingridient, paramToChoose: .ingridients)
          fetchCoctailData(request: request)
     }
-    
-   func handleCellEvent(coctail: CoctailModel, event: CoctailCellEvent) {
-      switch event {
-      case .favoriteDidTapped:
-        if let value = favorities[coctail] {
-          favorities[coctail] = !value
-        } else {
-            favorities[coctail] = true
+    func handleCellEvent(coctail: CoctailModel, event: CoctailCellEvent) {
+        switch event {
+        case .favoriteDidTapped:
+            favorities[coctail] = !(favorities[coctail] ?? false) //если нет значения то ?? вернет false и favorities[coctail] = !false то есть true
+            if favorities[coctail] == true {
+                let ingridientsString = coctail.ingredients.joined(separator: ",")
+                storeManager.createFavoriteCoctail(coctailName: coctail.name, ingridients: ingridientsString, instruction: coctail.instructions)
+            } else {
+                print("UNSave")
+            }
         }
-      }
     }
+
+//   func handleCellEvent(coctail: CoctailModel, event: CoctailCellEvent) {
+//      switch event {
+//      case .favoriteDidTapped:
+//        if let value = favorities[coctail] {
+//          favorities[coctail] = !value
+//        } else {
+//            favorities[coctail] = true
+//        }
+//          if favorities[coctail] == true{
+//              print("Save")
+//          } else {
+//              print("UNSave")
+//          }
+//      }
+//    }
         
     private func addIngridienstForSection(){
         dataCoctailsForSections.append(.ingridients(IngridiensModel.getIngridients()))
