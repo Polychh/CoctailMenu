@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if let error = errorStore as NSError? {
                 fatalError("Store error \(error), \(error.userInfo)")
             } else {
-                print("Store URL: \(String(describing: descriptionStore.url))")
+               // print("Store URL: \(String(describing: descriptionStore.url))")
             }
         })
         return container

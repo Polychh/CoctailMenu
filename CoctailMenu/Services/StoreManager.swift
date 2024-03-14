@@ -10,9 +10,9 @@ import CoreData
 
 protocol StoreManagerProtocol{
     func createFavoriteCoctail(coctailName: String, ingridients: String, instruction: String)
-    func fetchQuotes() -> [FavorCotail]
+    func fetchCoctails() -> [FavorCotail]
     func deleteAllCoctails()
-    func deleteOneCoctails(with nameCoctail: String)
+    func deleteOneCoctails(withName nameCoctail: String)
 }
 
 final class StoreManager: StoreManagerProtocol {
@@ -33,7 +33,7 @@ final class StoreManager: StoreManagerProtocol {
         coctail.nameCoctail = coctailName
         coctail.instruction = instruction
         coctail.ingridients = ingridients
-        print("save coctail \(coctail)")
+        //print("save coctail \(coctail)")
         appDelagate.saveContext()
     }
     
@@ -41,12 +41,12 @@ final class StoreManager: StoreManagerProtocol {
         let fetchRequest = NSFetchRequest<FavorCotail>(entityName: entityName)
         do{
             let coctails = try? context.fetch(fetchRequest)
-            coctails?.forEach{ context.delete($0)}
+            coctails?.forEach{ context.delete($0) }
         }
         appDelagate.saveContext()
     }
     
-    func deleteOneCoctails(with nameCoctail: String) {
+    func deleteOneCoctails(withName nameCoctail: String) {
         let fetchRequest = NSFetchRequest<FavorCotail>(entityName: entityName)
         do{
             guard let coctails = try? context.fetch(fetchRequest),
@@ -57,7 +57,7 @@ final class StoreManager: StoreManagerProtocol {
     }
     
     
-    func fetchQuotes() -> [FavorCotail]{
+    func fetchCoctails() -> [FavorCotail]{
         let fetchRequest = NSFetchRequest<FavorCotail>(entityName: entityName)
         do{
             let coctails = (try? context.fetch(fetchRequest)) ?? []

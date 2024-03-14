@@ -21,6 +21,7 @@ protocol MainViewModelProtocol{
     func handleCellEvent(coctail: CoctailModel, event: CoctailCellEvent)
     func getCoctailData(searchWord: String)
     func getIngridientsData(ingridient: String)
+    func checkFavorities()
 }
 
 final class MainViewModel: MainViewModelProtocol{
@@ -38,10 +39,11 @@ final class MainViewModel: MainViewModelProtocol{
     var dataCoctailsForSections: [ListSectionModel] = .init()
    
     private let network: NetworkMangerProtocol
-    private let storeManager: StoreManagerProtocol = StoreManager()
+    private let storeManager: StoreManagerProtocol
     
-    init(network: NetworkMangerProtocol){
+    init(network: NetworkMangerProtocol, store: StoreManagerProtocol){
         self.network = network
+        self.storeManager = store
         addIngridienstForSection()
         getIngridientsData(ingridient: "Vodka")
     }
@@ -56,34 +58,38 @@ final class MainViewModel: MainViewModelProtocol{
         let request = CoctailRequest(cotailName: nil, ingridients: ingridient, paramToChoose: .ingridients)
          fetchCoctailData(request: request)
     }
+    
     func handleCellEvent(coctail: CoctailModel, event: CoctailCellEvent) {
         switch event {
         case .favoriteDidTapped:
             favorities[coctail] = !(favorities[coctail] ?? false) //если нет значения то ?? вернет false и favorities[coctail] = !false то есть true
             if favorities[coctail] == true {
-                let ingridientsString = coctail.ingredients.joined(separator: ",")
-                storeManager.createFavoriteCoctail(coctailName: coctail.name, ingridients: ingridientsString, instruction: coctail.instructions)
+                saveCoctail(coctailData: coctail)
             } else {
-                print("UNSave")
+                deleteOneCoctail(coctailData: coctail)
+                //print(storeManager.fetchCoctails())
             }
         }
     }
-
-//   func handleCellEvent(coctail: CoctailModel, event: CoctailCellEvent) {
-//      switch event {
-//      case .favoriteDidTapped:
-//        if let value = favorities[coctail] {
-//          favorities[coctail] = !value
-//        } else {
-//            favorities[coctail] = true
-//        }
-//          if favorities[coctail] == true{
-//              print("Save")
-//          } else {
-//              print("UNSave")
-//          }
-//      }
-//    }
+    
+    func checkFavorities(){
+        let savedCoctail = storeManager.fetchCoctails()
+        let namesCoctails = savedCoctail.map { $0.nameCoctail }
+        favorities.forEach { key, value in
+            if !namesCoctails.contains(key.name){
+                favorities[key] = false
+            }
+        }
+    }
+    
+    private func saveCoctail(coctailData: CoctailModel){
+        let ingridientsString = coctailData.ingredients.joined(separator: ",")
+        storeManager.createFavoriteCoctail(coctailName: coctailData.name, ingridients: ingridientsString, instruction: coctailData.instructions)
+    }
+    
+    private func deleteOneCoctail(coctailData: CoctailModel){
+        storeManager.deleteOneCoctails(withName: coctailData.name)
+    }
         
     private func addIngridienstForSection(){
         dataCoctailsForSections.append(.ingridients(IngridiensModel.getIngridients()))

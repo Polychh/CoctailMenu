@@ -13,7 +13,9 @@ protocol BuilderFavoritiesFlowProtocol{
 
 final class BuilderFavoritiesFlow: BuilderFavoritiesFlowProtocol {
     func buildFavoritiesVC(router: RouterFavoritiesVCProtocol) -> UIViewController {
-        let vc = FavoritiesViewController()
+        let store = StoreManager()
+        let viewModel = FavoritiesViewModel(storeManager: store)
+        let vc = FavoritiesViewController(viewModel: viewModel)
         return vc
     }
 }

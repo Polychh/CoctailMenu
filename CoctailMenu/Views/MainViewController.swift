@@ -48,6 +48,11 @@ class MainViewController: UIViewController {
         setConstraints()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.checkFavorities()
+    }
+    
     private func observeData(){
         viewModel.favoritiesPublisher
             .dropFirst()
