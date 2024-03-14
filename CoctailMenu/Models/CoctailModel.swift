@@ -7,7 +7,7 @@
 
 import Foundation
 // MARK: - CoctailNames
-struct CoctailModel: Decodable {
+struct CoctailModel: Decodable, Hashable {
     let ingredients: [String]
     let instructions, name: String
 }

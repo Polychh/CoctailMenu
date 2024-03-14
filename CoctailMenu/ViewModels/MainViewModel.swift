@@ -14,9 +14,11 @@ protocol MainViewModelProtocol{
     var indexPathCurentPublisher: Published<IndexPath>.Publisher { get }
     var selectedIndexPath: IndexPath { get set }
     var indexPathCurent: IndexPath { get set }
-    
+    var favoritiesPublisher: Published<[CoctailModel : Bool]>.Publisher { get }
+    var favorities: [CoctailModel : Bool] { get }
     var changeColorWhenReload: Bool { get set}
     var dataCoctailsForSections: [ListSectionModel] { get }
+    func handleCellEvent(coctail: CoctailModel, event: CoctailCellEvent)
     func getCoctailData(searchWord: String)
     func getIngridientsData(ingridient: String)
 }
@@ -25,9 +27,12 @@ final class MainViewModel: MainViewModelProtocol{
     @Published var isLoaded: Bool = false
     @Published var selectedIndexPath: IndexPath = .init()
     @Published var indexPathCurent: IndexPath = .init()
+    @Published var favorities: [CoctailModel : Bool] = .init()
+    
     var isLoadedPublisher: Published<Bool>.Publisher { $isLoaded }
     var selectedIndexPathPublisher: Published<IndexPath>.Publisher { $selectedIndexPath }
     var indexPathCurentPublisher: Published<IndexPath>.Publisher { $indexPathCurent }
+    var favoritiesPublisher: Published<[CoctailModel : Bool]>.Publisher { $favorities }
     
     var changeColorWhenReload: Bool = false
     var dataCoctailsForSections: [ListSectionModel] = .init()
@@ -49,6 +54,17 @@ final class MainViewModel: MainViewModelProtocol{
     func getIngridientsData(ingridient: String){
         let request = CoctailRequest(cotailName: nil, ingridients: ingridient, paramToChoose: .ingridients)
          fetchCoctailData(request: request)
+    }
+    
+   func handleCellEvent(coctail: CoctailModel, event: CoctailCellEvent) {
+      switch event {
+      case .favoriteDidTapped:
+        if let value = favorities[coctail] {
+          favorities[coctail] = !value
+        } else {
+            favorities[coctail] = true
+        }
+      }
     }
         
     private func addIngridienstForSection(){

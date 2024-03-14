@@ -7,14 +7,26 @@
 //
 
 import UIKit
+import Combine
+enum CoctailCellEvent {
+  case favoriteDidTapped
+}
 
 final class CoctailCell: UICollectionViewCell {
     static let resuseID = "CoctailCell"
+    
+    private let eventSubject = PassthroughSubject<CoctailCellEvent, Never>()
+      var eventPublisher: AnyPublisher<CoctailCellEvent, Never> {
+        eventSubject.eraseToAnyPublisher()
+      }
+    
+    var cancellables = Set<AnyCancellable>()
     
     private let coctailNameLabel = UILabel()
     private let ingridientsLabel = UILabel()
     private let instructionLabel = UILabel()
     private let stack = UIStackView()
+    private let favoriteButton = UIButton()
     
     private let backView: UIView = {
         let view = UIView()
@@ -33,6 +45,7 @@ final class CoctailCell: UICollectionViewCell {
         super.init(frame: frame)
         setUpUIElements()
         setConstrains()
+        addActionButtons()
     }
     
     required init?(coder: NSCoder) {
@@ -43,7 +56,13 @@ final class CoctailCell: UICollectionViewCell {
         configLabel(label: coctailNameLabel, sizeText: 18, weithText: .bold, lines: 1, alignment: .left, color: .black)
         configLabel(label: ingridientsLabel, sizeText: 16, weithText: .regular, lines: 3, alignment: .left, color: .black)
         configLabel(label: instructionLabel, sizeText: 12, weithText: .regular, lines: 5, alignment: .left, color: .black)
+        configButton(button: favoriteButton, symbol: "star.fill")
         configStack(stack: stack)
+    }
+    
+    func configButton(button: UIButton, symbol: String){
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.tintColor = #colorLiteral(red: 0.7176470588, green: 0.5176470588, blue: 0.7176470588, alpha: 1)
     }
     
     private func configStack(stack: UIStackView){
@@ -71,14 +90,25 @@ final class CoctailCell: UICollectionViewCell {
         coctailNameLabel.text = nil
         ingridientsLabel.text = nil
         instructionLabel.text = nil
+        cancellables = Set<AnyCancellable>()
+    }
+    
+    private func addActionButtons(){
+        favoriteButton.addTarget(nil, action: #selector(favoriteTapped), for: .touchUpInside)
+    }
+    
+    @objc func favoriteTapped(){
+        eventSubject.send(.favoriteDidTapped)
     }
 }
 
 //MARK: - Configure Cell UI
 extension CoctailCell{
-    func configCell(nameCoctail: String, instruction: String, ingridients: [String]){
+    func configCell(nameCoctail: String, instruction: String, ingridients: [String], isLiked: Bool){
         coctailNameLabel.text = nameCoctail
         instructionLabel.text = instruction
+        let image: UIImage? = isLiked ? .init(systemName: "heart.fill"): .init(systemName: "heart")
+        favoriteButton.setBackgroundImage(image, for: .normal)
         let ingridientsString = ingridients.joined(separator: ",")
         ingridientsLabel.text = ingridientsString
     }
@@ -92,6 +122,7 @@ extension CoctailCell{
         stack.addArrangedSubview(ingridientsLabel)
         stack.addArrangedSubview(instructionLabel)
         backView.addSubview(stack)
+        backView.addSubview(favoriteButton)
         
         NSLayoutConstraint.activate([
             
@@ -99,9 +130,14 @@ extension CoctailCell{
             backView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             backView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             backView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            
+            favoriteButton.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -5),
+            favoriteButton.topAnchor.constraint(equalTo: backView.topAnchor, constant: 5),
+            favoriteButton.widthAnchor.constraint(equalToConstant: 20),
+            favoriteButton.heightAnchor.constraint(equalToConstant: 20),
                         
             stack.topAnchor.constraint(equalTo: backView.topAnchor, constant: 6),
-            stack.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -6),
+            stack.trailingAnchor.constraint(equalTo: favoriteButton.leadingAnchor, constant: -2),
             stack.bottomAnchor.constraint(equalTo: backView.bottomAnchor, constant: -6),
             stack.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 4),
         ])
