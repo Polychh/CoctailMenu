@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 class MainViewController: UIViewController {
-
+    
     private var viewModel: MainViewModelProtocol
     private var cancellables = Set<AnyCancellable>()
     private let searchController = CoctailSearchController(searchResultsController: nil)
@@ -77,11 +77,11 @@ class MainViewController: UIViewController {
             .sink { [weak self] index in
                 guard let self else { return }
                 guard let cell = collectionView.cellForItem(at: index) as? IngridientCell else { return }
-                    cell.color = #colorLiteral(red: 0.9843137255, green: 0.5333333333, blue: 0.7058823529, alpha: 1) //change collor when sellect cell
+                cell.color = #colorLiteral(red: 0.9843137255, green: 0.5333333333, blue: 0.7058823529, alpha: 1) //change collor when sellect cell
             }
             .store(in: &cancellables)
         
-        viewModel.indexPathCurentPublisher
+        viewModel.indexPathCurentPublisher // when reloadeed curent indexPath update for all cell and chek here if selectedIndexPath == curentIndexPath change color for cell
             .dropFirst()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] index in
@@ -175,7 +175,7 @@ private extension MainViewController{
         let section = CompositionLayout.createSection(group: group, scrollBehavior: .none, groupSpacing: 0, leading: 10, trailing: 10, supplementary: [createHeader()])
         return section
     }
-   
+    
     private func createHeader() -> NSCollectionLayoutBoundarySupplementaryItem{
         .init(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(30)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
     }
@@ -245,6 +245,7 @@ extension MainViewController:  UISearchControllerDelegate, UISearchBarDelegate{
         guard let searchText = searchBar.text, !searchText.isEmpty else { return }
         viewModel.changeColorWhenReload = true // flag for change cell color for default when reload collectionView
         searchController.searchBar.text = "" //clean for next search
+        viewModel.selectedIndexPath = .init() // clean selectedIndexPath, when reload after getCoctailData request not change color for cell , because selectedIndexPath is no cleaned up
         viewModel.getCoctailData(searchWord: searchText)
         searchBar.resignFirstResponder()
     }
