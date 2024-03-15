@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 class MainViewController: UIViewController {
-
+    
     private var viewModel: MainViewModelProtocol
     private var cancellables = Set<AnyCancellable>()
     private let searchController = CoctailSearchController(searchResultsController: nil)
@@ -51,6 +51,7 @@ class MainViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.checkFavorities()
+        // viewModel.selectedIndexPath = .init()
     }
     
     private func observeData(){
@@ -77,7 +78,8 @@ class MainViewController: UIViewController {
             .sink { [weak self] index in
                 guard let self else { return }
                 guard let cell = collectionView.cellForItem(at: index) as? IngridientCell else { return }
-                    cell.color = #colorLiteral(red: 0.9843137255, green: 0.5333333333, blue: 0.7058823529, alpha: 1) //change collor when sellect cell
+                print("Done1")
+                cell.color = #colorLiteral(red: 0.9843137255, green: 0.5333333333, blue: 0.7058823529, alpha: 1) //change collor when sellect cell
             }
             .store(in: &cancellables)
         
@@ -91,6 +93,7 @@ class MainViewController: UIViewController {
                     cell.color = #colorLiteral(red: 1, green: 0.3176470588, blue: 0.1843137255, alpha: 1)
                     viewModel.changeColorWhenReload = false
                 } else {
+                    print("Done")
                     cell.color = #colorLiteral(red: 0.9843137255, green: 0.5333333333, blue: 0.7058823529, alpha: 1) // for cell with stored index change color in selected color when reload collectionView
                 }
             }
@@ -175,7 +178,7 @@ private extension MainViewController{
         let section = CompositionLayout.createSection(group: group, scrollBehavior: .none, groupSpacing: 0, leading: 10, trailing: 10, supplementary: [createHeader()])
         return section
     }
-   
+    
     private func createHeader() -> NSCollectionLayoutBoundarySupplementaryItem{
         .init(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(30)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
     }
@@ -245,6 +248,7 @@ extension MainViewController:  UISearchControllerDelegate, UISearchBarDelegate{
         guard let searchText = searchBar.text, !searchText.isEmpty else { return }
         viewModel.changeColorWhenReload = true // flag for change cell color for default when reload collectionView
         searchController.searchBar.text = "" //clean for next search
+        viewModel.selectedIndexPath = .init() // clean selectedIndexPath, when reload after getCoctailData request not change color for cell , because selectedIndexPath is no cleaned up
         viewModel.getCoctailData(searchWord: searchText)
         searchBar.resignFirstResponder()
     }
