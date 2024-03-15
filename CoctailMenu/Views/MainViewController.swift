@@ -51,7 +51,6 @@ class MainViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.checkFavorities()
-        // viewModel.selectedIndexPath = .init()
     }
     
     private func observeData(){
@@ -78,12 +77,11 @@ class MainViewController: UIViewController {
             .sink { [weak self] index in
                 guard let self else { return }
                 guard let cell = collectionView.cellForItem(at: index) as? IngridientCell else { return }
-                print("Done1")
                 cell.color = #colorLiteral(red: 0.9843137255, green: 0.5333333333, blue: 0.7058823529, alpha: 1) //change collor when sellect cell
             }
             .store(in: &cancellables)
         
-        viewModel.indexPathCurentPublisher
+        viewModel.indexPathCurentPublisher // when reloadeed curent indexPath update for all cell and chek here if selectedIndexPath == curentIndexPath change color for cell
             .dropFirst()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] index in
@@ -93,7 +91,6 @@ class MainViewController: UIViewController {
                     cell.color = #colorLiteral(red: 1, green: 0.3176470588, blue: 0.1843137255, alpha: 1)
                     viewModel.changeColorWhenReload = false
                 } else {
-                    print("Done")
                     cell.color = #colorLiteral(red: 0.9843137255, green: 0.5333333333, blue: 0.7058823529, alpha: 1) // for cell with stored index change color in selected color when reload collectionView
                 }
             }
