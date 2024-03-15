@@ -4,4 +4,6 @@
 #### Стек технологий: UIKit, MVVM, Async/Await, Combine, Compositional Layout, CoreData
 
 ---
-<img src="https://github.com/Polychh/CoctailMenu/blob/main/CoctailMenuVideo.gif" width="400" height="800">
+<img src="https://github.com/Polychh/CoctailMenu/blob/develop/CoctailMenuVideo.gif" width="400" height="800">
+
+
